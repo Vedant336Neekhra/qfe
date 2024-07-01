@@ -10,7 +10,10 @@ from collections import namedtuple
 import torch.nn.functional as F
 from torch.nn import ReLU, Sigmoid, MaxPool2d, AdaptiveAvgPool2d
 
-thisdir = os.path.dirname('notebookv.ipynb')
+
+
+
+thisdir = os.path.dirname('e4e.py')
 def extract_from_statedict(statedict, name:str = 'model'):
     if name.endswith('.'):
         name = name[:-1]
@@ -444,10 +447,10 @@ class E4e(Module):
         if self.latent_avg_offset:
             w = w + self.latent_avg
         return w
-def load_e4e():
+def load_e4e(path_of_pt_file):
     e4e = E4e(gan_size=256, pretrained=False, latent_avg_offset=True).eval().requires_grad_(False)
     state_dict = {}
-    ckpt = torch.load('e4e.pt', map_location='cpu')
+    ckpt = torch.load(path_of_pt_file, map_location='cpu')
     state_dict['latent_avg'] = ckpt['latent_avg']
     state_dict.update(extract_from_statedict(ckpt['state_dict'], 'encoder'))
     e4e.load_state_dict(state_dict)
