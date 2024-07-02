@@ -10,7 +10,7 @@ class SegModel(nn.Module):  # todo: move to models
     def __init__(self) -> None:
         super().__init__()
         self.model = deeplabv3_resnet50(pretrained=False, num_classes=3, pretrained_backbone=True)
-        ckpt = 'segmentator.pt'
+        ckpt = '/content/checkpoint/segmentator.pt'
         ckpt = torch.load(ckpt, map_location='cpu')['state']
         ckpt = {k: v for k, v in ckpt.items() if k != 'loss.weight'}
         self.load_state_dict(ckpt)
