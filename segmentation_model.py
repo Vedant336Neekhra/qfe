@@ -35,9 +35,12 @@ def for_model(image_path):
     ])
     tensor_image = transform(image)
     return tensor_image.view(-1,3,256,256)
-def semantic_loss(Ig,real_image_path):
+def semantic_loss(Ig,real_image_path,device):
     model = SegModel()
+    model = model.to(device)
     I = for_model(real_image_path)
+    I=I.to(device)
+    Ig=Ig.to(device)
     with torch.no_grad():  
       Sbg, Sbody, Shead = model(Ig)
       SbgI, SbodyI, SheadI = model(I)
