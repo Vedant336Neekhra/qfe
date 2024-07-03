@@ -45,7 +45,9 @@ def semantic_loss(Ig,real_image_path,device):
       Sbg, Sbody, Shead = model(Ig)
       SbgI, SbodyI, SheadI = model(I)
     M = 1 - SbodyI
-    Limg = torch.norm(M*(Ig-I), p=2) ** 2
-    Lhead = torch.norm((SheadI - Shead), p=2) ** 2
+    Limg = F.mse_loss(M*Ig, M*I, reduction='none')
+    Limg = Limg.mean((1,2,3)).sum()
+    Lhead = F.mse_loss(Shead, SheadI, reduction='none')
+    Lhead = Lhead.mean((1,2,3)).sum()
     return Limg,Lhead
 
