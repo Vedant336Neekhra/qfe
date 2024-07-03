@@ -38,8 +38,9 @@ def for_model(image_path):
 def semantic_loss(Ig,real_image_path):
     model = SegModel()
     I = for_model(real_image_path)
-    Sbg, Sbody, Shead = model(Ig)
-    SbgI, SbodyI, SheadI = model(I)
+    with torch.no_grad():  
+      Sbg, Sbody, Shead = model(Ig)
+      SbgI, SbodyI, SheadI = model(I)
     M = 1 - SbodyI
     Limg = torch.norm(M*(Ig-I), p=2) ** 2
     Lhead = torch.norm((SheadI - Shead), p=2) ** 2
